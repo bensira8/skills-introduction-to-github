@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "algo-rlc"
+version = "1.0.0"
+description = "2nd-order RLC analogue filter (LP, HP, BP) discretised via Bilinear Transform."
+readme = "docs/README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["rlc", "filter", "iir", "bilinear-transform", "signal-processing", "semver"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
