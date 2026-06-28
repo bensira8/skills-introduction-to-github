@@ -1,0 +1,6 @@
+Transcribe these G-code instructions to a clean, readable SVG.
+Requirements:
+- Preserve original scale and stroke order.
+- Return a complete `<svg>` with a valid `viewBox`.
+- Use a single path when possible.
+- Do not add extra geometry not present in the input.
