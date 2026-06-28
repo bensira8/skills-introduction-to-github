@@ -22,6 +22,12 @@ Semántica de `dir=LEFT_DOWN`:
 - columnas: avance en `-X`
 - filas: avance en `-Y`
 
+Resultado para `nx=2 ny=2 paso=80` con `ref=B1 cx=40 cy=40`:
+- `B1 = (40, 40)`
+- `B2 = (-40, 40)`
+- `B3 = (40, -40)`
+- `B4 = (-40, -40)`
+
 Si falta `dir` con `ref` presente, el compilador **debe fallar** con error:
 `E_ARRAY_DIR_REQUIRED`.
 
@@ -70,6 +76,9 @@ CIRCLE cx=0 cy=0 d=68 layer=CUT_INNER
 ARRAY cmd=CIRCLE ref=B1 cx=40 cy=40 d=10 nx=2 ny=2 paso=80 dir=LEFT_DOWN layer=CUT_INNER
 END
 ```
+
+Validación esperada:
+`FEEDBACK: Todo dentro del área útil. Clearance mínimo: 17.6 mm.`
 
 ## Errores comunes
 - Usar `ref` sin `dir`.
