@@ -15,7 +15,7 @@ Cuando `ARRAY` use `ref`, el campo `dir` es obligatorio.
 Ejemplo válido:
 
 ```text
-ARRAY cmd=CIRCLE ref=B1 cx=40 cy=40 d=10 nx=2 ny=2 paso=80 dir=LEFT_DOWN layer=CUT_INNER
+ARRAY cmd=CIRCLE ref=B1 anchor=CENTER cx=40 cy=40 d=10 nx=2 ny=2 paso=80 dir=LEFT_DOWN layer=CUT_INNER
 ```
 
 Semántica de `dir=LEFT_DOWN`:
@@ -37,6 +37,14 @@ Si falta `dir` con `ref` presente, el compilador **debe fallar** con error:
   - `paso_y = paso`
 - Si existen `paso_x` y/o `paso_y`, **dominan** sobre `paso`.
 
+Ejemplo con prioridad explícita:
+
+```text
+ARRAY cmd=CIRCLE ref=B1 anchor=CENTER cx=40 cy=40 d=10 nx=2 ny=2 paso=80 paso_x=100 paso_y=60 dir=LEFT_DOWN layer=CUT_INNER
+```
+
+En ese caso, se aplican `paso_x=100` y `paso_y=60`.
+
 Errores sugeridos:
 - `E_ARRAY_STEP_INVALID` si algún paso es `<= 0`.
 - `E_ARRAY_STEP_MISSING` si no hay `paso` ni (`paso_x`,`paso_y`).
@@ -45,8 +53,15 @@ Errores sugeridos:
 Para evitar ambigüedad en `ref`, se define `anchor` explícito.
 Valores recomendados: `TOP_LEFT`, `TOP_RIGHT`, `BOTTOM_LEFT`, `BOTTOM_RIGHT`, `CENTER`.
 
-Si `ref` existe y no se puede inferir anclaje de forma inequívoca, exigir `anchor` o fallar con:
-`E_ARRAY_ANCHOR_REQUIRED`.
+Semántica geométrica de `anchor`:
+- `TOP_LEFT`: esquina superior izquierda de la geometría base.
+- `TOP_RIGHT`: esquina superior derecha de la geometría base.
+- `BOTTOM_LEFT`: esquina inferior izquierda de la geometría base.
+- `BOTTOM_RIGHT`: esquina inferior derecha de la geometría base.
+- `CENTER`: centro geométrico de la geometría base.
+
+Regla de compilación: si `ref` existe, `anchor` es obligatorio (sin inferencia implícita).
+Si falta `anchor`, fallar con: `E_ARRAY_ANCHOR_REQUIRED`.
 
 ### 4) Contrato de coordenadas con ORIGIN=CENTER
 Con `ORIGIN=CENTER`, `x,y` siempre representa el centro geométrico del objeto.
@@ -73,7 +88,7 @@ Regla: si un elemento no debe cortar material, usar `MARK`.
 PIECE id=panel_frontal W=310 H=130 UNIT=mm ORIGIN=CENTER Y_AXIS=UP KERF=0.15 STROKE=0.1
 RECT x=0 y=0 w=310 h=130 layer=CUT_OUTER
 CIRCLE cx=0 cy=0 d=68 layer=CUT_INNER
-ARRAY cmd=CIRCLE ref=B1 cx=40 cy=40 d=10 nx=2 ny=2 paso=80 dir=LEFT_DOWN layer=CUT_INNER
+ARRAY cmd=CIRCLE ref=B1 anchor=CENTER cx=40 cy=40 d=10 nx=2 ny=2 paso=80 dir=LEFT_DOWN layer=CUT_INNER
 END
 ```
 
@@ -82,5 +97,6 @@ Validación esperada:
 
 ## Errores comunes
 - Usar `ref` sin `dir`.
+- Usar `ref` sin `anchor`.
 - Definir `paso` con valor no positivo.
 - Mezclar intención de fabricación (`CUT_*`) con referencia visual (debe ser `MARK`).
