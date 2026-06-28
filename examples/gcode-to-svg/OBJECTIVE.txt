@@ -1,0 +1,1 @@
+Objective: Convert valid G-code instructions into a clean, readable SVG while preserving scale and stroke order.
